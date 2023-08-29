@@ -1,0 +1,30 @@
+GET http://localhost:3001/api/blogs
+
+###
+DELETE http://localhost:3001/api/blogs/64c74c4141b899d56eda5a72
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type:application/json
+
+
+{    
+    "title": "React patterns",
+    "author": "Michael Chan",
+    "url": "https://reactpatterns.com/",
+
+    "likes": 7   
+  }
+
+   
+###
+PUT http://localhost:3001/api/blogs/64c74e0041b899d56eda5a77
+    Content-Type:application/json
+
+
+    {
+        "title":"Non existing title",
+        "author":"No author",
+        "url": "http://fanthom/link",
+        "likes": 5
+    }
