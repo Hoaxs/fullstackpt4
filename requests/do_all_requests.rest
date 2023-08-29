@@ -9,11 +9,11 @@ Content-Type:application/json
 
 
 {    
-    "title": "React patterns",
-    "author": "Michael Chan",
+    "title": "React pat",
+    "author": "Mich Chan",
     "url": "https://reactpatterns.com/",
 
-    "likes": 7   
+    "likes": 89   
   }
 
    
