@@ -1,0 +1,28 @@
+GET http://localhost:3001/api/blogs
+
+###
+DELETE http://localhost:3001/api/blogs/64ee20b9fa2e7aa7913d641e
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type:application/json
+
+
+    {
+    
+    "title": "Type wars",
+    "author": "Robert C. Martin",
+    "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    "likes": 2    
+    }
+###
+PUT http://localhost:3001/api/blogs/64c74e0041b899d56eda5a77
+Content-Type:application/json
+
+
+    {
+        "title":"Non existing title",
+        "author":"No author",
+        "url": "http://fanthom/link",
+        "likes": 1000
+    }
