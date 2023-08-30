@@ -64,7 +64,4 @@ module.exports = {
     blogsInDatabase,
     corrrectIdFormat,
     missingLikesPropertyDefaultsToZero
-
-
-
 }
