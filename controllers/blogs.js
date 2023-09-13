@@ -3,10 +3,11 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const logger = require('../utils/logger')
+const User = require('../models/user')
 
 blogsRouter.post('/', async (request, response, next) => {
     const body = request.body
-
+    const user = await User.findById(body.userId)
     if (body.author === undefined || body.title === undefined || body.url === undefined) {
         return response.status(400).json({ error: 'content missing' })
     }
@@ -15,10 +16,15 @@ blogsRouter.post('/', async (request, response, next) => {
         title: body.title,
         author: body.author,
         url: body.url,
-        likes: body.likes
+        likes: body.likes,
+        user: user.id
     })
     const savedBlog = await blog.save()
+    user.blogs = user.blogs.concat(savedBlog._id)// one to many relationship
+    await user.save()
     response.status(201).json(savedBlog).end()
+
+
 
 })
 

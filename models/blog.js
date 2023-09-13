@@ -13,7 +13,11 @@ const blogSchema = new mongoose.Schema({
         required: [true, 'author required']
     },
     url: String,
-    likes: Number
+    likes: Number,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 
 })
 
