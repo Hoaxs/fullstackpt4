@@ -14,6 +14,7 @@ beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
 })
+
 describe('when there is initially some blogs saved', () => {
     test('correct number of blogs are returned in json format', async () => {
 
@@ -42,7 +43,7 @@ describe('when there is initially some blogs saved', () => {
     })
 })//
 
-describe('To makes changes to the blog', () => {
+describe('To make changes to the blog', () => {
     test('valid blog can be added', async () => {
         const blog = {
             title: 'Fake React Patterns',

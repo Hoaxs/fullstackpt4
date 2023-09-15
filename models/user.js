@@ -8,7 +8,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true,
         unique: true
+
     },
+
     name: String,
     passwordHash: String,
     blogs: [

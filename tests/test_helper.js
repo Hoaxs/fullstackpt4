@@ -1,5 +1,7 @@
 /*eslint-disable*/
 const Blog = require('../models/blog')
+
+
 const initialBlogs = [
 
     {
@@ -37,6 +39,8 @@ const initialBlogs = [
 
 ]
 
+
+
 const blogsInDatabase = async () => {
     const blogs = await Blog.find({})
     return blogs.map(blog => blog.toJSON())
@@ -57,11 +61,10 @@ const missingLikesPropertyDefaultsToZero = (blog) => {
 
 }
 
-
-
 module.exports = {
     initialBlogs,
     blogsInDatabase,
     corrrectIdFormat,
     missingLikesPropertyDefaultsToZero
+
 }
