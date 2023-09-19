@@ -8,6 +8,7 @@ const User = require('../models/user')
 blogsRouter.post('/', async (request, response, next) => {
     const body = request.body
     const user = await User.findById(body.userId)
+    console.log("logging user", user)
     if (body.author === undefined || body.title === undefined || body.url === undefined) {
         return response.status(400).json({ error: 'content missing' })
     }
@@ -19,12 +20,13 @@ blogsRouter.post('/', async (request, response, next) => {
         likes: body.likes,
         user: user.id
     })
+    if (blog.likes === undefined) {
+        blog.likes = 0
+    }
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)// one to many relationship
     await user.save()
     response.status(201).json(savedBlog).end()
-
-
 
 })
 
