@@ -9,11 +9,11 @@ Content-Type:application/json
 
 
     {
-    "title": "Why you should check-in your node dependencies",
-    "author": "Jack Franklin",
-    "url": "https://www.jackfranklin.co.uk/blog/check-in-your-node-dependencies/",
+    "title": "First class test",
+    "author": "Robert C. Martin",
+    "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html",
     "likes": 8,
-    "userId":"65019d0b13881a1247f972d4"               
+    "userId":"650d8d9b3d87ba4c72ac776b"                 
     
     }
 ###
@@ -22,7 +22,7 @@ Content-Type:application/json
 
 
     {
-        "title":"Non existing title",
+        "title":"First class test",
         "author":"No author",
         "url": "http://fanthom/link",
         "likes": 1000
