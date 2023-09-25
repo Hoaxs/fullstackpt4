@@ -4,6 +4,8 @@ const usersRouter = require('express').Router()
 const User = require('../models/user')
 const log = require('../utils/logger')
 
+
+
 usersRouter.post('/', async (request, response) => {
     const { username, name, password } = request.body
 
