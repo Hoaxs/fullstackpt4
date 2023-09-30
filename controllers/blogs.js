@@ -6,20 +6,27 @@ const logger = require('../utils/logger')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
-const getTokenFrom = request => {
+/*const getTokenFrom = request => {
+    // will be refactored to middleware
     const authorization = request.get('authorization')
     if (authorization && authorization.startsWith('Bearer ')) {
-        return authorization.replace('Bearer ', '') // Note: Bearer seems case sensitive.Use the same case when sending request in POSTMAN or VS code Rest client. Also strip  off the token's enclosing quotation marks in VS code client
+
+        return authorization.replace('Bearer ', '')// Note: Bearer seems case sensitive.Use the same case when sending request on POSTMAN or VScode Rest Client. Also strip  off the token's enclosing quotation marks in VScode Client.
+
+
     }
     return null
 }
+*/
 
 blogsRouter.post('/', async (request, response, next) => {
-    const body = request.body
-    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    //const body = request.body
+    console.log('printing...', request.token)
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
     if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
     }
+    console.log('printing in post', decodedToken)
     const user = await User.findById(decodedToken.id)
     if (body.author === undefined || body.title === undefined || body.url === undefined) {
         return response.status(400).json({ error: 'content missing' })
@@ -36,9 +43,6 @@ blogsRouter.post('/', async (request, response, next) => {
     user.blogs = user.blogs.concat(savedBlog._id)// one to many relationship
     await user.save()
     response.status(201).json(savedBlog).end()
-
-
-
 })
 
 blogsRouter.get('/', async (request, response) => {
@@ -49,7 +53,6 @@ blogsRouter.get('/', async (request, response) => {
     response.json(blogs)
 
 })
-
 
 // use Mongoose findById method
 blogsRouter.get('/:id', (request, response) => {

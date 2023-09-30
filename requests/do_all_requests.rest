@@ -1,4 +1,4 @@
-GET http://localhost:3001/api/blog
+GET http://localhost:3001/api/blogs
 
 ###
 DELETE http://localhost:3001/api/blog/64bd0f09ab4d0d9f0d55075b
@@ -6,13 +6,10 @@ DELETE http://localhost:3001/api/blog/64bd0f09ab4d0d9f0d55075b
 ###
 POST http://localhost:3001/api/blogs
 Content-Type:application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2NTBkODJiNzliODJlMjhjMTA0MzhjMjEiLCJpYXQiOjE2OTU2MTYxNzl9.aHwP9gcJhs3V3yR9EVmydDecby1fCikBMzRhTuXOK7c
-
-
-
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2NTBkODJiNzliODJlMjhjMTA0MzhjMjEiLCJpYXQiOjE2OTYwNjI1NzMsImV4cCI6MTY5NjA2NjE3M30.mXlokRtMZYWuACWOu4NzfH-HFK7mQ5IM0ZdzHe1JctI
 
     {
-    "title": "Single page apps use token authentication",
+    "title": "Is Application development really  hard as imagined?",
     "author": "Matti Lukkaine",
     "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html",
     "likes": 10,
