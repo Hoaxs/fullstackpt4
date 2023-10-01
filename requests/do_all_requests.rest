@@ -6,14 +6,14 @@ DELETE http://localhost:3001/api/blog/64bd0f09ab4d0d9f0d55075b
 ###
 POST http://localhost:3001/api/blogs
 Content-Type:application/json
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2NTBkODJiNzliODJlMjhjMTA0MzhjMjEiLCJpYXQiOjE2OTYwNjI1NzMsImV4cCI6MTY5NjA2NjE3M30.mXlokRtMZYWuACWOu4NzfH-HFK7mQ5IM0ZdzHe1JctI
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJvYmVyIiwiaWQiOiI2NTBkOGQ5YjNkODdiYTRjNzJhYzc3NmIiLCJpYXQiOjE2OTYxNDc1MjEsImV4cCI6MTY5NjE1MTEyMX0.SkJfMljqDnwNleCMHpPg1Ht1f-sxGqECYtwKPAOEBQE
 
     {
-    "title": "Is Application development really  hard as imagined?",
-    "author": "Matti Lukkaine",
+    "title": "Why invalid token?",
+    "author": "Robert C.Martin",
     "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html",
-    "likes": 10,
-    "userId": "650d82b79b82e28c10438c21"                
+    "likes": 9,
+    "userId": "650d8d9b3d87ba4c72ac776b"                
     
     }
 ###

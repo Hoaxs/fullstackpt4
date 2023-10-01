@@ -20,13 +20,15 @@ const jwt = require('jsonwebtoken')
 */
 
 blogsRouter.post('/', async (request, response, next) => {
-    //const body = request.body
-    console.log('printing...', request.token)
+
+    const body = request.body
+    request.token = request.token.trim()
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
     if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
     }
-    console.log('printing in post', decodedToken)
+
     const user = await User.findById(decodedToken.id)
     if (body.author === undefined || body.title === undefined || body.url === undefined) {
         return response.status(400).json({ error: 'content missing' })

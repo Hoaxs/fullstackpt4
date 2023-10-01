@@ -31,10 +31,9 @@ const errorHandler = (error, request, response, next) => {
 }
 
 const tokenExtractor = (request, response, next) => {
-    const authorization = request.get('authorization')
+    const authorization = request.header('authorization')
     if (authorization && authorization.startsWith('Bearer')) {
-        request.token = authorization.replace('Bearer', '')//strips off Bearer from token        
-        return response.status(201).end()
+        request.token = authorization.replace('Bearer', '')//strips off Bearer from token  
     }
     next()
 
