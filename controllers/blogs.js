@@ -5,6 +5,7 @@ const Blog = require('../models/blog')
 const logger = require('../utils/logger')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const blog = require('../models/blog')
 
 /*const getTokenFrom = request => {
     // will be refactored to middleware
@@ -22,13 +23,12 @@ const jwt = require('jsonwebtoken')
 blogsRouter.post('/', async (request, response, next) => {
 
     const body = request.body
-    request.token = request.token.trim()
+
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
     if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
     }
-
     const user = await User.findById(decodedToken.id)
     if (body.author === undefined || body.title === undefined || body.url === undefined) {
         return response.status(400).json({ error: 'content missing' })
@@ -75,6 +75,17 @@ blogsRouter.get('/:id', (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response, next) => {
+
+    const blog = await Blog.findById(request.params.id)
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    const validUserId = decodedToken.id
+    const invalidUser = '650d82b79b82e28c10438c21'
+    if (!decodedToken.id) {
+        return response.status(401).json({ error: 'Invalid token' })
+    }
+    if (blog.user.toString() !== (validUserId)) {
+        return response.status(401).json({ error: "Invalid user" })
+    }
     await Blog.findByIdAndRemove(request.params.id)
     // eslint-disable-next-line no-unused-vars      
     logger.info(`${request.params.id}`)

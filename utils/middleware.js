@@ -33,7 +33,7 @@ const errorHandler = (error, request, response, next) => {
 const tokenExtractor = (request, response, next) => {
     const authorization = request.header('authorization')
     if (authorization && authorization.startsWith('Bearer')) {
-        request.token = authorization.replace('Bearer', '')//strips off Bearer from token  
+        request.token = authorization.replace('Bearer', '').trim()//strips off Bearer from token and trims the leading space  
     }
     next()
 
