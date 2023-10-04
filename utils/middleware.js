@@ -1,5 +1,7 @@
 /*eslint-disable*/
 const logger = require('./logger')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 const requestLogger = (request, response, next) => {
 
@@ -33,16 +35,31 @@ const errorHandler = (error, request, response, next) => {
 const tokenExtractor = (request, response, next) => {
     const authorization = request.header('authorization')
     if (authorization && authorization.startsWith('Bearer')) {
-        request.token = authorization.replace('Bearer', '').trim()//strips off Bearer from token and trims the leading space  
+        request.token = authorization.replace('Bearer', '').trim()//strips off Bearer from token and trims the leading space
+
     }
     next()
 
 }
+
+const userExtractor = async (request, response, next) => {
+
+    userVerifiedToken = jwt.verify(request.token, process.env.SECRET)
+    const user = await User.findById(userVerifiedToken.id)
+    request.user = { username: user.username, name: user.name, id: user._id.toString() }
+
+    next()
+
+}
+
+
+
 module.exports = {
     tokenExtractor,
     requestLogger,
     unknownEndpoint,
-    errorHandler
+    errorHandler,
+    userExtractor
 
 
 }

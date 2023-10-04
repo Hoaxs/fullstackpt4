@@ -4,8 +4,6 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const logger = require('../utils/logger')
 const User = require('../models/user')
-const jwt = require('jsonwebtoken')
-const blog = require('../models/blog')
 
 /*const getTokenFrom = request => {
     // will be refactored to middleware
@@ -23,13 +21,13 @@ const blog = require('../models/blog')
 blogsRouter.post('/', async (request, response, next) => {
 
     const body = request.body
+    // verification of user refactored to middleware    
+    const userOfToken = request.user
 
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-    if (!decodedToken.id) {
+    if (!userOfToken.id) {
         return response.status(401).json({ error: 'token invalid' })
     }
-    const user = await User.findById(decodedToken.id)
+    const user = await User.findById(userOfToken.id)
     if (body.author === undefined || body.title === undefined || body.url === undefined) {
         return response.status(400).json({ error: 'content missing' })
     }
@@ -77,10 +75,11 @@ blogsRouter.get('/:id', (request, response) => {
 blogsRouter.delete('/:id', async (request, response, next) => {
 
     const blog = await Blog.findById(request.params.id)
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    const validUserId = decodedToken.id
+    const userOfToken = request.user
+    const validUserId = userOfToken.id
+    logger.info(`logging valid user Id ${validUserId}`)
     const invalidUser = '650d82b79b82e28c10438c21'
-    if (!decodedToken.id) {
+    if (!validUserId) {
         return response.status(401).json({ error: 'Invalid token' })
     }
     if (blog.user.toString() !== (validUserId)) {
