@@ -3,12 +3,19 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const logger = require('../utils/logger')
+<<<<<<< Updated upstream
 const User = require('../models/user')
 
 blogsRouter.post('/', async (request, response, next) => {
     const body = request.body
     const user = await User.findById(body.userId)
     console.log("logging user", user)
+=======
+
+blogsRouter.post('/', async (request, response, next) => {
+    const body = request.body
+
+>>>>>>> Stashed changes
     if (body.author === undefined || body.title === undefined || body.url === undefined) {
         return response.status(400).json({ error: 'content missing' })
     }
@@ -17,6 +24,7 @@ blogsRouter.post('/', async (request, response, next) => {
         title: body.title,
         author: body.author,
         url: body.url,
+<<<<<<< Updated upstream
         likes: body.likes,
         user: user.id
     })
@@ -26,6 +34,11 @@ blogsRouter.post('/', async (request, response, next) => {
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)// one to many relationship
     await user.save()
+=======
+        likes: body.likes
+    })
+    const savedBlog = await blog.save()
+>>>>>>> Stashed changes
     response.status(201).json(savedBlog).end()
 
 })

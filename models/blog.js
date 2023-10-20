@@ -13,11 +13,15 @@ const blogSchema = new mongoose.Schema({
         required: [true, 'author required']
     },
     url: String,
+<<<<<<< Updated upstream
     likes: Number,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
+=======
+    likes: Number
+>>>>>>> Stashed changes
 
 })
 

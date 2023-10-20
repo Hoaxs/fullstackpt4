@@ -9,12 +9,20 @@ Content-Type:application/json
 
 
     {
+<<<<<<< Updated upstream
     "title": "Why I do not miss React",
     "author": "Jack Franklin",
     "url": "https://www.jackfranklin.co.uk/blog/check-in-your-node-dependencies/",
     "likes": 8,
     "userId":"6504963a9a710a72a2810046"               
     
+=======
+    "title": "Type wars",
+    "author": "Robert C. Martin",
+    "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    "likes": 2               
+     
+>>>>>>> Stashed changes
     }
 ###
 PUT http://localhost:3001/api/blog/64c74e0041b899d56eda5a77

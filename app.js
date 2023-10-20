@@ -1,13 +1,19 @@
 /*eslint-disable*/
+<<<<<<< Updated upstream
 /*User management starts on this branch*/
 
+=======
+>>>>>>> Stashed changes
 const mongoose = require('mongoose')
 const express = require('express')
 require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const blogsRouter = require('./controllers/blogs')
+<<<<<<< Updated upstream
 const usersRouter = require('./controllers/users')
+=======
+>>>>>>> Stashed changes
 const config = require('./utils/config')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
@@ -27,7 +33,10 @@ app.use(express.static('build'))
 app.use(express.json())
 app.use(middleware.requestLogger)
 app.use('/api/blogs', blogsRouter)
+<<<<<<< Updated upstream
 app.use('/api/users/', usersRouter)
+=======
+>>>>>>> Stashed changes
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 module.exports = app
