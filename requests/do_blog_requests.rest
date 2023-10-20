@@ -1,0 +1,30 @@
+DELETE http://localhost:3001/api/blogs/651d2b191fb3482996c1ce7b
+Authorization:Bearer 
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type:application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1pY2hhZWwiLCJpZCI6IjY1MjM5NWYyMmIzNmU1NDIzNWQxZjBhMiIsImlhdCI6MTY5NzYzMTc5NSwiZXhwIjoxNjk3NjM1Mzk1fQ.ubisi9S7JSzyhPotKeL4M6z1Kk-88Q1yfmQBWLd9wUs
+
+    {
+    "title": "Complicated exerciseses?",
+    "author": "Michael Chan",
+    "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html",
+    "likes": 9
+    //"id" : "652395f22b36e54235d1f0a2"              
+    }
+
+###
+GET http://localhost:3001/api/blogs
+
+###
+PUT http://localhost:3001/api/blogs/64c74e0041b899d56eda5a77
+Content-Type:application/json
+
+
+    {
+        "title":"First class test",
+        "author":"No author",
+        "url": "http://fanthom/link",
+        "likes": 1000
+    }

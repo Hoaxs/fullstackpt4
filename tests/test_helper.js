@@ -7,7 +7,7 @@ const initialBlogs = [
 
     {
         _id: '5a422a851b54a676234d17f7',
-        title: 'React patterns',
+        title: 'React Patterns',
         author: 'Michael Chan',
         url: 'https://reactpatterns.com/',
         likes: 7,
@@ -42,6 +42,42 @@ const initialBlogs = [
 
 
 
+const users = [
+    {
+        username: 'mluukkai',
+        name: 'Matti Luukkainen',
+        password: "salainen",
+
+    },
+    {
+        username: 'Michael',
+        name: 'Michael Chan',
+        password: 'mch8897'
+    },
+    {
+        username: 'Edsger',
+        name: 'Edsger W.Dijkstra',
+        password: 'EdsW6667'
+    },
+    {
+        username: 'Jack',
+        name: 'Jack Franklin',
+        password: 'jfk2233'
+
+
+    },
+    {
+        username: 'Robert',
+        name: 'Robert C.Martin',
+        password: 'rcm2349'
+    },
+    {
+        username: 'Stanley',
+        name: 'Stanley Francis',
+        password: 'phd8897'
+    }
+]
+
 const blogsInDatabase = async () => {
     const blogs = await Blog.find({})
     return blogs.map(blog => blog.toJSON())
@@ -66,11 +102,15 @@ const missingLikesPropertyDefaultsToZero = (blog) => {
 
 }
 
+
+
+
 module.exports = {
     initialBlogs,
     blogsInDatabase,
     corrrectIdFormat,
     missingLikesPropertyDefaultsToZero,
-    usersInDb
+    usersInDb,
+    users
 
 }

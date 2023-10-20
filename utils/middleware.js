@@ -53,13 +53,13 @@ const userExtractor = async (request, response, next) => {
 }
 
 
-
 module.exports = {
     tokenExtractor,
+    userExtractor,
     requestLogger,
     unknownEndpoint,
-    errorHandler,
-    userExtractor
+    errorHandler
+
 
 
 }

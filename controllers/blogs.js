@@ -4,6 +4,10 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const logger = require('../utils/logger')
 const User = require('../models/user')
+const middleware = require('../utils/middleware')
+
+
+
 
 /*const getTokenFrom = request => {
     // will be refactored to middleware
@@ -18,16 +22,16 @@ const User = require('../models/user')
 }
 */
 
-blogsRouter.post('/', async (request, response, next) => {
-
+blogsRouter.post('/', middleware.userExtractor, async (request, response, next) => {
     const body = request.body
-    // verification of user refactored to middleware    
-    const userOfToken = request.user
 
-    if (!userOfToken.id) {
+    // verification of user refactored to middleware
+    const decodedToken = request.user
+
+    if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
     }
-    const user = await User.findById(userOfToken.id)
+    const user = await User.findById(decodedToken.id)
     if (body.author === undefined || body.title === undefined || body.url === undefined) {
         return response.status(400).json({ error: 'content missing' })
     }
@@ -39,10 +43,11 @@ blogsRouter.post('/', async (request, response, next) => {
         likes: body.likes,
         user: user._id
     })
+
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)// one to many relationship
     await user.save()
-    response.status(201).json(savedBlog).end()
+    response.status(201).json(savedBlog)
 })
 
 blogsRouter.get('/', async (request, response) => {
@@ -72,17 +77,13 @@ blogsRouter.get('/:id', (request, response) => {
         })
 })
 
-blogsRouter.delete('/:id', async (request, response, next) => {
+blogsRouter.delete('/:id', middleware.userExtractor, async (request, response, next) => {
 
     const blog = await Blog.findById(request.params.id)
-    const userOfToken = request.user
-    const validUserId = userOfToken.id
-    logger.info(`logging valid user Id ${validUserId}`)
-    const invalidUser = '650d82b79b82e28c10438c21'
-    if (!validUserId) {
-        return response.status(401).json({ error: 'Invalid token' })
-    }
-    if (blog.user.toString() !== (validUserId)) {
+
+    const decodedToken = request.user
+
+    if (blog.user.toString() !== (decodedToken.id)) {
         return response.status(401).json({ error: "Invalid user" })
     }
     await Blog.findByIdAndRemove(request.params.id)

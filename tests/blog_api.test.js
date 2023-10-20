@@ -12,25 +12,28 @@ const helper = require('./test_helper')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 
-beforeEach(async () => {
-    await Blog.deleteMany({})
-    await Blog.insertMany(helper.initialBlogs)
-})
+
+let token = ''
 describe('when there is initially one user in db', () => {
 
     beforeEach(async () => {
         await User.deleteMany({})
-        const passwordHash = await bcrypt.hash('secrete', 10)
-        const user = new User({ username: 'root', passwordHash })
-        await user.save()
+        await Blog.deleteMany({})
+        const password = 'salainen'
+        const saltRound = 10
+        let passwordHash = await bcrypt.hash(password, saltRound)
+        const user = new User({ username: 'mluukkai', name: 'Matti Luukkainen', passwordHash })
+        await user.save();
+
     })
 
     test('creation succeeds with fresh username', async () => {
+
         const usersAtStart = await helper.usersInDb()
         const newUser = {
-            username: 'mluukkai',
-            name: 'Matti Luukkainen',
-            password: 'salainen'
+            username: 'Stanley',
+            name: 'Stanley Francis',
+            password: 'phd8897'
         }
         await api
             .post('/api/users')
@@ -38,11 +41,12 @@ describe('when there is initially one user in db', () => {
             .expect(201)
             .expect('Content-Type', /application\/json/)
         const usersAtEnd = await helper.usersInDb()
+        console.log('log users at end under fresh user test', usersAtEnd)
         expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+
     })
     test('Invalid user is not created', async () => {
         const usersAtStart = await helper.usersInDb()
-
         const invalidUser = {
             username: 'ml',
             name: 'Daniel Moore',
@@ -55,116 +59,122 @@ describe('when there is initially one user in db', () => {
         const usersAtEnd = await helper.usersInDb()
         console.log('invalid user credentials')
         expect(usersAtStart).toHaveLength(usersAtEnd.length)
+
+
     })
 
-})//
-describe('when there is initially some blogs saved', () => {
-    test('correct number of blogs are returned in json format', async () => {
-
+    test('Existing user can log in', async () => {
 
         await api
-            .get('/api/blogs')
+            .post('/api/login')
+            .send({ username: 'mluukkai', name: 'MattiLuukkainen', password: 'salainen' })
+            .expect(response => {
+                token = response.body.token
+            })
             .expect(200)
-            .expect('Content-Type', /application\/json/)
-
-        const initBlogsInDb = await helper.blogsInDatabase()
-        expect(initBlogsInDb).toHaveLength(helper.initialBlogs.length)
 
     })
-
-    test('blog id is defined', async () => {
-
-
-        await api
-            .get('/api/blogs')
-            .expect(200)
-            .expect('Content-Type', /application\/json/)
-
-        const blogsInDb = await helper.corrrectIdFormat()
-        expect(blogsInDb).toBeDefined()
-
-    })
-})//
-
-describe('To make changes to the blog', () => {
-    /*
-    test('valid blog can be added', async () => {
-        const blog = {
-            title: 'Fake React Patterns',
-            author: 'Fake Michael Chan',
-            url: ' https://reactpatterns.com/fake',
-            likes: 80
-        }
-
-        await api
-            .post('/api/blogs')
-            .send(blog)
-            .expect(201)
-            .expect('Content-type', /application\/json/)
-
-        const blogsAfterPostRequest = await helper.blogsInDatabase()
-        expect(blogsAfterPostRequest).toHaveLength(helper.initialBlogs.length + 1)
-        const titles = blogsAfterPostRequest.map(t => t.title)
-        expect(titles).toContain('Fake React Patterns')
 })
-    */
-
-    test('single blog can be deleted', async () => {
-
-        const blogsFromDatabase = await helper.blogsInDatabase()
-        const blogToDelete = blogsFromDatabase[0]
 
 
-        await api
-            .delete(`/api/blogs/${blogToDelete.id}`)
-            .expect(204)
-    })
+test('valid blog can be added', async () => {
 
-    test('Single blog can be updated', async () => {
-        const initBlog = await helper.blogsInDatabase()
-        initBlog[0].likes = 1200
-        await api
-            .put(`/api/blogs/${initBlog[0].id}`)
-            .send(initBlog[0])
-            .expect(204)
-        const updatedBlog = await helper.blogsInDatabase()
-        //console.log(updatedBlog)
-    })
+    const userAtEnd = await helper.usersInDb()
+    console.log('login existing user under blog', userAtEnd)
 
-    /*test('Missing Likes property  defaults to zero', async () => {
-        const blog = {
-            title: 'Fake Model React Patterns',
-            author: 'Fake Model Author',
-            url: ' https://reactpatterns.com/fakery',
+    const blog = {
+        "title": "Setting token can be tricky during testing",
+        "author": "Matt Mluukkai",
+        "url": "http//:no urlatall,com",
+        "likes": 4
 
-        }
+    }
+    await api
+        .post('/api/blogs')
+        .send(blog)
+        .set('Accept', 'application/json')
+        .set({ 'Authorization': `Bearer ${token}` })
+        .expect('Content-type', /application\/json/)
+        .expect(201)
+    const blogsAtEnd = await helper.blogsInDatabase()
+    const title = blogsAtEnd.map(t => t.title)
+    expect(title).toContain('Setting token can be tricky during testing')
+})
 
-        await api
-            .post('/api/blogs')
-            .send(blog)
-            .expect(201)
+test('blogs are returned as json', async () => {
+    await api
+        .get('/api/blogs')
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+})
 
-        const blogsAtEnd = await helper.blogsInDatabase()
-        const zeroLikes = helper.missingLikesPropertyDefaultsToZero(blogsAtEnd)
-        expect(zeroLikes[0]).toHaveProperty('likes', 0)
-    })
-   */
-    test('Missing url or title properties returns status code 400', async () => {
+test('A blog can be deleted', async () => {
 
-        const blog = {
+    const blogToDelete = await helper.blogsInDatabase()
+    await api
+        .delete(`/api/blogs/${blogToDelete[0].id}`)
+        .set({ 'Authorization': `Bearer ${token}` })
+        .expect(204)
+    const blogsAtEnd = await helper.blogsInDatabase()
+    const title = blogsAtEnd.map(t => t.title)
+    expect(title).not.toContain(blogToDelete.title)
+})
 
-            author: 'Fake Model Author'
+test('Missing Likes property  defaults to zero', async () => {
+    const blog = {
+        title: 'Fake Model React Patterns',
+        author: 'Fake Model Author',
+        url: ' https://reactpatterns.com/fakery',
 
-        }
-        await api
-            .post('/api/blogs')
-            .send(blog)
-            .expect(400)
+    }
 
-    })
+    await api
+        .post('/api/blogs')
+        .set({ 'Authorization': `Bearer ${token}` })
+        .send(blog)
+        .expect(201)
 
-})//
+    const blogsAtEnd = await helper.blogsInDatabase()
+    const zeroLikes = helper.missingLikesPropertyDefaultsToZero(blogsAtEnd)
+    expect(zeroLikes[0]).toHaveProperty('likes', 0)
+})
+
+test('Missing url or title properties returns status code 400', async () => {
+
+    const blog = {
+
+        author: 'Fake Model Author',
+        likes: 0
+    }
+    await api
+        .post('/api/blogs')
+        .set({ 'Authorization': `Bearer ${token}` })
+        .send(blog)
+        .expect(400)
+
+})
+
+test('test fails  with status code 401 if token was not provided', async () => {
+
+    const blog = {
+        title: 'Matti makes learning nodejs a fun practice',
+        author: 'Fake Model Author',
+        url: ' https://reactpatterns.com/fakery',
+        likes: 10
+
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(401)
+})
 
 afterAll(async () => {
     await mongoose.connection.close()
 })
+
+
+
+
+

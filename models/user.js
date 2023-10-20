@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema({
         unique: true
 
     },
-
     name: String,
     passwordHash: String,
     blogs: [
@@ -20,7 +19,6 @@ const userSchema = new mongoose.Schema({
         }
     ],
 })
-
 userSchema.plugin(uniqueValidator)
 
 userSchema.set('toJSON', {
